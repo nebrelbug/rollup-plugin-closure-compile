@@ -1,0 +1,15 @@
+{
+  "name": "rollup-plugin-closure-compiler-new",
+  "version": "0.0.0",
+  "description": "Rollup plugin that uses the up-to-date JS version of Closure Compiler to minify your code. Works with sourcemaps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "closure-compiler",
+    "closure-compiler-js"
+  ],
+  "author": "Ben Gubler <nebrelbug@gmail.com> (https://bengubler.com)",
+  "license": "MIT"
+}
