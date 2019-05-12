@@ -1,5 +1,4 @@
 // rollup.config.js (building more than one bundle)
-
 export default [
   {
     input: 'src/index.js',

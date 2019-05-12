@@ -1,12 +1,12 @@
 {
-  "name": "rollup-plugin-closure-compiler-new",
+  "name": "rollup-plugin-closure-compile",
   "version": "0.0.0",
   "description": "Rollup plugin that uses the up-to-date JS version of Closure Compiler to minify your code. Works with sourcemaps",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/standard 'src/*.js' && ./node_modules/.bin/mocha",
     "build": "./node_modules/.bin/rollup -c",
-    "testbuild": "./node_modules/.bin/rollup --config rollup.config.test.js",
+    "testbuild": "./node_modules/.bin/rollup --config test/rollup.config.js",
     "format": "./node_modules/.bin/standard --fix 'src/*.js'"
   },
   "keywords": [
@@ -17,18 +17,20 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nebrelbug/rollup-plugin-closure-compiler-new.git"
+    "url": "git+https://github.com/nebrelbug/rollup-plugin-closure-compile.git"
   },
   "bugs": {
-    "url": "https://github.com/nebrelbug/rollup-plugin-closure-compiler-new/issues"
+    "url": "https://github.com/nebrelbug/rollup-plugin-closure-compile/issues"
   },
   "devDependencies": {
     "mocha": "^6.1.4",
+    "rollup": "^1.11.3",
     "standard": "^12.0.1"
   },
   "dependencies": {
-    "chalk": "^2.4.2",
-    "google-closure-compiler": "^20190415.0.0",
-    "rollup": "^1.11.3"
+    "google-closure-compiler": "^20190415.0.0"
+  },
+  "standard": {
+    "ignore": ["test/shoulderr.js", "node_modules/**"]
   }
 }

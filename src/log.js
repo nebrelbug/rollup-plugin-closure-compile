@@ -1,26 +1,27 @@
 /*
 Based on code here: https://github.com/camelaissani/rollup-plugin-closure-compiler-js/blob/master/src/index.js
 */
-var chalk = require('chalk')
+var colors = {
+  red: process.env.NODE_DISABLE_COLORS ? '' : '\x1b[31m',
+  yellow: process.env.NODE_DISABLE_COLORS ? '' : '\x1b[33m',
+  normal: process.env.NODE_DISABLE_COLORS ? '' : '\x1b[0m'
+}
 
-function loopMsgs(arr, color) {
-  function logMsg(msg) {
-    console.log(chalk[color](msg))
+function loopMsgs (arr, color) {
+  function logMsg (msg) {
+    console.log(colors[color] + msg + colors.normal)
   }
-  arr.forEach(function(msg) {
+  arr.forEach(function (msg) {
     if (!msg.file && (msg.lineNo < 0 || !msg.lineNo)) {
       logMsg(msg.type)
     } else {
       logMsg(msg.file + ':' + msg.lineNo + ' (' + msg.type + ')')
     }
-    logMsg(msg.description)
+    logMsg('    ' + msg.description)
   })
 }
 
-export default function(output) {
-  console.log('++++++++++++++++++++++')
-  console.log(JSON.stringify(output))
-
+export default function (output) {
   if (output.warnings && Array.isArray(output.warnings)) {
     loopMsgs(output.warnings, 'yellow')
   }
@@ -33,16 +34,3 @@ export default function(output) {
     return false
   }
 }
-
-// loopMsgs(
-//   [
-//     { type: 'ReferenceError', description: 'SomeError' },
-//     {
-//       type: 'ReferenceError',
-//       description: 'SomeError',
-//       lineNo: 30,
-//       file: 'index.js'
-//     }
-//   ],
-//   'red'
-// )
