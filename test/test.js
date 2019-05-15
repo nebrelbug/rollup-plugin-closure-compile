@@ -1,9 +1,17 @@
 /* eslint-env mocha */
 
+/*
 import assert from 'assert'
 import { rollup } from 'rollup'
-import closureCompile from './src/index.js'
+import closureCompile from '../dist/closure-compiler-rollup.js'
 import { readFileSync } from 'fs'
+
+*/
+
+var assert = require('assert')
+var rollup = require('rollup').rollup
+var closureCompile = require('../dist/closure-compiler-rollup.js')
+var readFileSync = require('fs').readFileSync
 
 process.chdir('test')
 
@@ -13,67 +21,76 @@ describe('rollup-plugin-closure-compile', function () {
 
   it('should compile', () => {
     return rollup({
-      entry: 'fixtures/unminified.js',
-      plugins: [closure()]
+      entry: 'example/shouldwork.js',
+      plugins: [closureCompile()]
     }).then(bundle => {
-      const { code, map } = bundle.generate({
-        format: 'cjs'
+      const { code } = bundle.generate({
+        format: 'umd',
+        name: 'sum'
       })
-      const jsFile = readFileSync('fixtures/unminified.js', 'utf-8')
-      const { compiledCode } = compile({ jsCode: [{ src: jsFile }] })
-      assert.equal(code, compiledCode + '\n')
+      var compiledCode = readFileSync('example/expected/sum.min.js', 'utf-8')
+
+      assert.strict.equal(code, compiledCode + '\n')
     })
   })
 
   it('should compile via closure-compiler options', () => {
     return rollup({
-      entry: 'fixtures/plain-file.js',
+      entry: 'example/shouldwork.js',
       plugins: [
-        closure({
+        closureCompile({
           compilationLevel: 'WHITESPACE_ONLY'
         })
       ]
     }).then(bundle => {
       const { code } = bundle.generate({
-        format: 'cjs'
+        format: 'umd',
+        name: 'sum'
       })
-      assert.equal(
-        code,
-        'var foo="bar";var t=1+2;console.log(foo);console.log(t);\n'
+      var compiledCode = readFileSync(
+        'example/expected/whitespace.min.js',
+        'utf-8'
       )
+
+      assert.strict.equal(code, compiledCode + '\n')
+    })
+  })
+
+  it('should error in advanced mode with undefined var', () => {
+    assert.throws(function () {
+      rollup({
+        entry: 'example/shoulderr.js',
+        plugins: [
+          closureCompile({
+            level: 'ADVANCED'
+          })
+        ]
+      })
+      // .then(bundle => {
+      //   const { code } = bundle.generate({
+      //     format: 'umd',
+      //     name: 'sum'
+      //   })
+      // })
     })
   })
 
   it('should compile with sourcemaps', () => {
     return rollup({
-      entry: 'fixtures/sourcemap.js',
-      plugins: [closure()]
+      entry: 'example/shouldwork.js',
+      plugins: [closureCompile()]
     }).then(bundle => {
       const { map } = bundle.generate({
-        format: 'cjs',
+        format: 'umd',
+        name: 'sum',
         sourceMap: true
       })
 
       assert.ok(map, 'has a source map')
-      assert.equal(map.version, 3, 'source map has expected version')
       assert.ok(Array.isArray(map.sources), 'source map has sources array')
-      assert.equal(map.sources.length, 2, 'source map has two sources')
+      assert.strict.equal(map.sources.length, 2, 'source map has two sources')
       assert.ok(Array.isArray(map.names), 'source maps has names array')
       assert.ok(map.mappings, 'source map has mappings')
-    })
-  })
-
-  it('bug with e6getter', () => {
-    return rollup({
-      entry: 'fixtures/es6getter.js',
-      plugins: [closure()]
-    }).then(bundle => {
-      const { code, map } = bundle.generate({
-        format: 'cjs',
-        sourceMap: true
-      })
-      assert(code)
-      assert(map)
     })
   })
 })

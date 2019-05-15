@@ -6,7 +6,7 @@
   "scripts": {
     "test": "./node_modules/.bin/standard 'src/*.js' && ./node_modules/.bin/mocha",
     "build": "./node_modules/.bin/rollup -c",
-    "testbuild": "./node_modules/.bin/rollup --config test/rollup.config.js",
+    "testbuild": "./node_modules/.bin/rollup --config example/rollup.config.js",
     "format": "./node_modules/.bin/standard --fix 'src/*.js'"
   },
   "keywords": [
@@ -31,6 +31,6 @@
     "google-closure-compiler": "^20190415.0.0"
   },
   "standard": {
-    "ignore": ["test/shoulderr.js", "node_modules/**"]
+    "ignore": ["example/shoulderr.js", "node_modules/**"]
   }
 }

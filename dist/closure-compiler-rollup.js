@@ -1,17 +1,21 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = global || self, factory(global.sum = {}));
-}(this, function (exports) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = global || self, global.sum = factory());
+}(this, function () { 'use strict';
 
   /*
   Based on code here: https://github.com/camelaissani/rollup-plugin-closure-compiler-js/blob/master/src/index.js
   */
-  var chalk = require('chalk');
+  var colors = {
+    red: process.env.NODE_DISABLE_COLORS ? '' : '\x1b[31m',
+    yellow: process.env.NODE_DISABLE_COLORS ? '' : '\x1b[33m',
+    normal: process.env.NODE_DISABLE_COLORS ? '' : '\x1b[0m'
+  };
 
   function loopMsgs (arr, color) {
     function logMsg (msg) {
-      console.log(chalk[color](msg));
+      console.log(colors[color] + msg + colors.normal);
     }
     arr.forEach(function (msg) {
       if (!msg.file && (msg.lineNo < 0 || !msg.lineNo)) {
@@ -85,56 +89,7 @@
     }
   }
 
-  function nonAsync (flags) {
-    return {
-      name: 'closure-compile',
-      renderChunk: function (code, ChunkInfo) {
-        // console.log(code)
-        // console.log(JSON.stringify(ChunkInfo))
-        var newFlags = {
-          processCommonJsModules: true,
-          path: ChunkInfo.name,
-          sourceMap: ChunkInfo.map, // The original sourcemap
-          fileName: ChunkInfo.name,
-          level: 'SIMPLE'
-        };
-        if (flags && flags === Object(flags)) {
-          for (var property in flags) {
-            newFlags[property] = flags[property];
-          }
-        }
-
-        flags.src = code;
-
-        var newCompiler = new ClosureCompiler({
-          compilation_level: flags.level
-        });
-
-        var compilerProcess = newCompiler.run([flags], function (
-          exitCode,
-          stdOut,
-          stdErr
-        ) {});
-        if (logger(compilerProcess)) {
-          throw new Error(
-            'Compilation error - ' +
-              compilerProcess.errors.length +
-              ' error' +
-              (compilerProcess.errors.length === 1 ? '' : 's')
-          )
-        }
-        return {
-          code: compilerProcess.compiledCode,
-          map: compilerProcess.sourceMap
-        }
-      }
-    }
-  }
-
-  exports.default = closureIt;
-  exports.nonAsync = nonAsync;
-
-  Object.defineProperty(exports, '__esModule', { value: true });
+  return closureIt;
 
 }));
 //# sourceMappingURL=closure-compiler-rollup.js.map
