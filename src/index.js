@@ -15,15 +15,20 @@ export default function closureIt (flags) {
         level: 'SIMPLE'
       }
       if (flags && flags === Object(flags)) {
-        for (var property in flags) {
-          newFlags[property] = flags[property]
+        for (var prop in flags) {
+          if (flags.hasOwnProperty(prop)) {
+            newFlags[prop] = flags[prop]
+          }
         }
       }
 
       newFlags.src = code
 
       var newCompiler = new ClosureCompiler({
-        compilation_level: newFlags.level || newFlags.compilation_level || newFlags.compilationLevel
+        compilation_level:
+          newFlags.level ||
+          newFlags.compilation_level ||
+          newFlags.compilationLevel
       })
 
       var compilerProcess = newCompiler.run([newFlags], function (

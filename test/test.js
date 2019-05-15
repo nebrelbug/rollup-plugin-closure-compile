@@ -1,15 +1,7 @@
 /* eslint-env mocha */
 
-/*
-import assert from 'assert'
-import { rollup } from 'rollup'
-import closureCompile from '../dist/closure-compiler-rollup.js'
-import { readFileSync } from 'fs'
-
-*/
-
 var assert = require('assert')
-var rollup = require('rollup').rollup
+var rollup = require('rollup')
 var closureCompile = require('../dist/closure-compiler-rollup.js')
 var readFileSync = require('fs').readFileSync
 /*
@@ -101,21 +93,45 @@ describe('rollup-plugin-closure-compile', function () {
   })
 })
 */
-rollup({
-  input: 'example/shouldwork.js',
-  plugins: [closureCompile()]
-}).then(bundle => {
-  bundle
-    .generate({
-      format: 'umd',
-      name: 'sum'
-    })
-    .then(output => {
-      var compiledCode = readFileSync(
-        'example/expected/sum.min.js',
-        'utf-8'
-      )
-      console.log(JSON.stringify(output))
-      // assert.strict.equal(output.code, compiledCode + '\n')
-    })
-})
+
+async function build () {
+  // create a bundle
+  const bundle = await rollup.rollup({
+    input: 'example/shouldwork.js',
+    plugins: [closureCompile()]
+  })
+
+  // generate code
+  const { output } = await bundle.generate({
+    format: 'umd',
+    name: 'sum'
+  })
+
+  var compiledCode = readFileSync(
+    'example/expected/sum.min.js',
+    'utf-8'
+  )
+  console.log(JSON.stringify(output))
+  assert.strict.equal(output[0].code, compiledCode)
+
+  for (const chunkOrAsset of output) {
+    if (chunkOrAsset.isAsset) {
+      // For assets, this contains
+      // {
+      //   isAsset: true,                 // signifies that this is an asset
+      //   fileName: string,              // the asset file name
+      //   source: string | Buffer        // the asset source
+      // }
+      console.log('Asset', chunkOrAsset)
+    } else {
+      // For chunks, this contains
+      // {
+      //   code: string,                  // the generated JS code
+
+      // }
+      console.log('Chunk', chunkOrAsset.modules)
+    }
+  }
+}
+
+build()
