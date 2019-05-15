@@ -12,7 +12,7 @@ var assert = require('assert')
 var rollup = require('rollup').rollup
 var closureCompile = require('../dist/closure-compiler-rollup.js')
 var readFileSync = require('fs').readFileSync
-
+/*
 process.chdir('test')
 
 describe('rollup-plugin-closure-compile', function () {
@@ -21,22 +21,28 @@ describe('rollup-plugin-closure-compile', function () {
 
   it('should compile', () => {
     return rollup({
-      entry: 'example/shouldwork.js',
+      input: '../example/shouldwork.js',
       plugins: [closureCompile()]
     }).then(bundle => {
-      const { code } = bundle.generate({
-        format: 'umd',
-        name: 'sum'
-      })
-      var compiledCode = readFileSync('example/expected/sum.min.js', 'utf-8')
-
-      assert.strict.equal(code, compiledCode + '\n')
+      bundle
+        .generate({
+          format: 'umd',
+          name: 'sum'
+        })
+        .then(output => {
+          var compiledCode = readFileSync(
+            'example/expected/sum.min.js',
+            'utf-8'
+          )
+          console.log(JSON.stringify(output))
+          assert.strict.equal(output.code, compiledCode + '\n')
+        })
     })
   })
 
   it('should compile via closure-compiler options', () => {
     return rollup({
-      entry: 'example/shouldwork.js',
+      input: 'example/shouldwork.js',
       plugins: [
         closureCompile({
           compilationLevel: 'WHITESPACE_ONLY'
@@ -59,7 +65,7 @@ describe('rollup-plugin-closure-compile', function () {
   it('should error in advanced mode with undefined var', () => {
     assert.throws(function () {
       rollup({
-        entry: 'example/shoulderr.js',
+        input: 'example/shoulderr.js',
         plugins: [
           closureCompile({
             level: 'ADVANCED'
@@ -77,7 +83,7 @@ describe('rollup-plugin-closure-compile', function () {
 
   it('should compile with sourcemaps', () => {
     return rollup({
-      entry: 'example/shouldwork.js',
+      input: 'example/shouldwork.js',
       plugins: [closureCompile()]
     }).then(bundle => {
       const { map } = bundle.generate({
@@ -93,4 +99,23 @@ describe('rollup-plugin-closure-compile', function () {
       assert.ok(map.mappings, 'source map has mappings')
     })
   })
+})
+*/
+rollup({
+  input: 'example/shouldwork.js',
+  plugins: [closureCompile()]
+}).then(bundle => {
+  bundle
+    .generate({
+      format: 'umd',
+      name: 'sum'
+    })
+    .then(output => {
+      var compiledCode = readFileSync(
+        'example/expected/sum.min.js',
+        'utf-8'
+      )
+      console.log(JSON.stringify(output))
+      // assert.strict.equal(output.code, compiledCode + '\n')
+    })
 })

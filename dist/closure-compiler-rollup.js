@@ -62,10 +62,10 @@
           }
         }
 
-        flags.src = code;
+        newFlags.src = code;
 
         var newCompiler = new ClosureCompiler({
-          compilation_level: flags.level
+          compilation_level: (newFlags.level || newFlags.compilation_level)
         });
 
         var compilerProcess = newCompiler.run([flags], function (

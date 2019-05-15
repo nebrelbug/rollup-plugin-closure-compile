@@ -20,13 +20,13 @@ export default function closureIt (flags) {
         }
       }
 
-      flags.src = code
+      newFlags.src = code
 
       var newCompiler = new ClosureCompiler({
-        compilation_level: flags.level
+        compilation_level: newFlags.level || newFlags.compilation_level || newFlags.compilationLevel
       })
 
-      var compilerProcess = newCompiler.run([flags], function (
+      var compilerProcess = newCompiler.run([newFlags], function (
         exitCode,
         stdOut,
         stdErr
