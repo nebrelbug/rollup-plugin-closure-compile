@@ -4,134 +4,107 @@ var assert = require('assert')
 var rollup = require('rollup')
 var closureCompile = require('../dist/closure-compiler-rollup.js')
 var readFileSync = require('fs').readFileSync
-/*
-process.chdir('test')
+
+process.chdir('test') // Set the 'test' directory to where all of the files are referenced from
+
+async function assertThrowsAsync (fn, regExp) {
+  // Taken from https://stackoverflow.com/a/46957474/7983596
+  let f = () => {}
+  try {
+    await fn()
+  } catch (e) {
+    f = () => {
+      throw e
+    }
+  } finally {
+    assert.throws(f, regExp)
+  }
+}
 
 describe('rollup-plugin-closure-compile', function () {
-  // because closure-compiler takes time
+  // Disabling Mocha's timeout, since Closure Compiler takes a long time
   this.timeout(0)
 
-  it('should compile', () => {
-    return rollup({
+  it('should compile', async function () {
+    // create a bundle
+    const bundle = await rollup.rollup({
       input: '../example/shouldwork.js',
       plugins: [closureCompile()]
-    }).then(bundle => {
-      bundle
-        .generate({
-          format: 'umd',
-          name: 'sum'
-        })
-        .then(output => {
-          var compiledCode = readFileSync(
-            'example/expected/sum.min.js',
-            'utf-8'
-          )
-          console.log(JSON.stringify(output))
-          assert.strict.equal(output.code, compiledCode + '\n')
-        })
     })
+
+    // generate code
+    const { output } = await bundle.generate({
+      format: 'umd',
+      name: 'sum'
+    })
+
+    var compiledCode = readFileSync('../example/expected/sum.min.js', 'utf-8')
+    assert.strict.equal(output[0].code, compiledCode)
   })
 
-  it('should compile via closure-compiler options', () => {
-    return rollup({
-      input: 'example/shouldwork.js',
+  it('should compile with different compilation levels', async function () {
+    // create a bundle
+    const bundle = await rollup.rollup({
+      input: '../example/shouldwork.js',
       plugins: [
         closureCompile({
           compilationLevel: 'WHITESPACE_ONLY'
         })
       ]
-    }).then(bundle => {
-      const { code } = bundle.generate({
-        format: 'umd',
-        name: 'sum'
-      })
-      var compiledCode = readFileSync(
-        'example/expected/whitespace.min.js',
-        'utf-8'
-      )
-
-      assert.strict.equal(code, compiledCode + '\n')
     })
+
+    // generate code
+    const { output } = await bundle.generate({
+      format: 'umd',
+      name: 'sum'
+    })
+
+    var compiledCode = readFileSync(
+      '../example/expected/whitespace.min.js',
+      'utf-8'
+    )
+    assert.strict.equal(output[0].code, compiledCode)
   })
 
-  it('should error in advanced mode with undefined var', () => {
-    assert.throws(function () {
-      rollup({
-        input: 'example/shoulderr.js',
+  it('should error in advanced mode with an undefined variable', async function () {
+    await assertThrowsAsync(async function () {
+      // create a bundle
+      const bundle = await rollup.rollup({
+        input: '../example/shoulderr.js',
         plugins: [
           closureCompile({
             level: 'ADVANCED'
           })
         ]
       })
-      // .then(bundle => {
-      //   const { code } = bundle.generate({
-      //     format: 'umd',
-      //     name: 'sum'
-      //   })
-      // })
-    })
+
+      // generate code
+      await bundle.generate({
+        format: 'umd',
+        name: 'sum'
+      })
+    }, /Error/)
   })
 
-  it('should compile with sourcemaps', () => {
-    return rollup({
-      input: 'example/shouldwork.js',
+  it('should compile with sourcemaps', async function () {
+    // create a bundle
+    const bundle = await rollup.rollup({
+      input: '../example/shouldwork.js',
       plugins: [closureCompile()]
-    }).then(bundle => {
-      const { map } = bundle.generate({
-        format: 'umd',
-        name: 'sum',
-        sourceMap: true
-      })
-
-      assert.ok(map, 'has a source map')
-      assert.ok(Array.isArray(map.sources), 'source map has sources array')
-      assert.strict.equal(map.sources.length, 2, 'source map has two sources')
-      assert.ok(Array.isArray(map.names), 'source maps has names array')
-      assert.ok(map.mappings, 'source map has mappings')
     })
+
+    // generate code
+    const { output } = await bundle.generate({
+      format: 'umd',
+      name: 'sum',
+      sourcemap: true
+    })
+
+    const map = output[0].map
+    assert.ok(map, 'has a source map')
+    assert.ok(Array.isArray(map.sources), 'source map has sources array')
+    assert.strict.equal(map.sources.length, 2, 'source map has two sources')
+    assert.ok(Array.isArray(map.names), 'source maps has names array')
+    assert.ok(map.mappings, 'source map has mappings')
   })
 })
-*/
-
-async function build () {
-  // create a bundle
-  const bundle = await rollup.rollup({
-    input: 'example/shouldwork.js',
-    plugins: [closureCompile()]
-  })
-
-  // generate code
-  const { output } = await bundle.generate({
-    format: 'umd',
-    name: 'sum'
-  })
-
-  var compiledCode = readFileSync(
-    'example/expected/sum.min.js',
-    'utf-8'
-  )
-  console.log(JSON.stringify(output))
-  assert.strict.equal(output[0].code, compiledCode)
-
-  for (const chunkOrAsset of output) {
-    if (chunkOrAsset.isAsset) {
-      // For assets, this contains
-      // {
-      //   isAsset: true,                 // signifies that this is an asset
-      //   fileName: string,              // the asset file name
-      //   source: string | Buffer        // the asset source
-      // }
-      console.log('Asset', chunkOrAsset)
-    } else {
-      // For chunks, this contains
-      // {
-      //   code: string,                  // the generated JS code
-
-      // }
-      console.log('Chunk', chunkOrAsset.modules)
-    }
-  }
-}
-
-build()

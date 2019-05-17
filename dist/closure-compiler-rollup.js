@@ -68,9 +68,9 @@
 
         var newCompiler = new ClosureCompiler({
           compilation_level:
-            newFlags.level ||
+            newFlags.compilationLevel ||
             newFlags.compilation_level ||
-            newFlags.compilationLevel
+            newFlags.level
         });
 
         var compilerProcess = newCompiler.run([newFlags], function (

@@ -6,11 +6,11 @@ export default [
   {
     input: 'example/shouldwork.js',
     output: {
-      file: 'example/dist/sum.min.js',
+      file: 'example/expected/whitespace.min.js',
       format: 'umd',
       name: 'sum',
-      sourcemap: true
+      sourcemap: false
     },
-    plugins: [closureCompile({ level: 'SIMPLE' })]
+    plugins: [closureCompile({ level: 'WHITESPACE_ONLY' })]
   }
 ]
