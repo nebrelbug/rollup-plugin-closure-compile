@@ -1,4 +1,6 @@
 // rollup.config.js (building more than one bundle)
+var babel = require('rollup-plugin-babel')
+
 export default [
   {
     input: 'src/index.js',
@@ -8,6 +10,10 @@ export default [
       name: 'sum',
       sourcemap: true
     },
-    plugins: []
+    plugins: [
+      babel({
+        exclude: 'node_modules/**'
+      })
+    ]
   }
 ]

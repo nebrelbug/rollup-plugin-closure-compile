@@ -51,3 +51,5 @@ export default function closureIt (flags) {
     }
   }
 }
+
+// Eventually I might add a babel plugin-builder utility as shown on the rollup-plugin-babel page

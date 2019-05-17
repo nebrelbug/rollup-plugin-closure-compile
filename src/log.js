@@ -22,14 +22,22 @@ function loopMsgs (arr, color) {
 }
 
 export default function (output) {
-  if (output.warnings && Array.isArray(output.warnings)) {
+  if (
+    output.warnings &&
+    Array.isArray(output.warnings) &&
+    output.warnings.length > 0
+  ) {
     loopMsgs(output.warnings, 'yellow')
   }
-  if (output.errors && Array.isArray(output.errors)) {
-    console.log(JSON.stringify(output.errors))
+  if (
+    output.errors &&
+    Array.isArray(output.errors) &&
+    output.errors.length > 0
+  ) {
+    // console.log(JSON.stringify(output.errors))
 
     loopMsgs(output.errors, 'red')
-    return output.errors.length > 0
+    return true
   } else {
     return false
   }
