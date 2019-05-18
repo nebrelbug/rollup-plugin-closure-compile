@@ -5,13 +5,11 @@ Rollup plugin that lets you compile your code with Google Closure Compiler
 ## Why this plugin?
 
 - Google Closure Compiler is the best JS minifier
-- It uses the up-to-date `google-closure-compiler` package on npm, rather than `google-closure-compiler-js`
-- It doesn't require you to have JavaScript installed
+- It uses the up-to-date `google-closure-compiler` package on npm, rather than the outdated `google-closure-compiler-js`
+- It doesn't require you to have Java installed
 - Supports `async`, and has a Babel polyfill for non-ES6 environments
 
-## Getting Started
-
-### Installing
+## Install
 
 With Yarn:
 
@@ -24,6 +22,22 @@ With npm:
 ```
 npm install rollup-plugin-closure-compile
 ```
+
+## Usage
+
+```js
+import closureCompile from 'closure-compiler-rollup'
+
+// In Rollup config:
+
+plugins: [
+    closureCompile({
+        level: 'SIMPLE' // Or 'ADVANCED' or 'WHITESPACE_ONLY'
+    })
+]
+```
+
+See the [google-closure-compiler](https://www.npmjs.com/package/google-closure-compiler) repository for information about flags
 
 ## Running the tests
 
@@ -41,7 +55,6 @@ The tests check:
 - That some things don't work that aren't supposed to
 - That sourcemaps are generated correctly
 - That the code is styled correctly, with `standard`
-
 
 ### Code Formatting
 
