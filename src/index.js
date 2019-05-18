@@ -4,7 +4,7 @@ const ClosureCompiler = require('google-closure-compiler').jsCompiler
 export default function closureIt (flags) {
   return {
     name: 'closure-compile',
-    renderChunk: async function (code, ChunkInfo) {
+    renderChunk: function (code, ChunkInfo) {
       // console.log(code)
       // console.log(JSON.stringify(ChunkInfo))
       var newFlags = {
