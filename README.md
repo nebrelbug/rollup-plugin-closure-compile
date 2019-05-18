@@ -1,4 +1,5 @@
 # rollup-plugin-closure-compile
+![Travis CI](https://img.shields.io/travis/com/nebrelbug/rollup-plugin-closure-compile.svg)
 
 Rollup plugin that lets you compile your code with Google Closure Compiler
 
