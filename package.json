@@ -2,7 +2,7 @@
   "name": "rollup-plugin-closure-compile",
   "version": "0.0.0",
   "description": "Rollup plugin that uses the up-to-date JS version of Closure Compiler to minify your code. Works with sourcemaps",
-  "main": "index.js",
+  "main": "dist/closure-compiler-rollup.js",
   "scripts": {
     "test": "./node_modules/.bin/standard 'src/*.js' && ./node_modules/.bin/mocha",
     "build": "./node_modules/.bin/rollup -c",
