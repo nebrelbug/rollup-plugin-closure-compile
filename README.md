@@ -13,13 +13,13 @@ Rollup plugin that lets you compile your code with Google Closure Compiler
 
 With Yarn:
 
-```
+```sh
 yarn add rollup-plugin-closure-compile
 ```
 
 With npm:
 
-```
+```sh
 npm install rollup-plugin-closure-compile
 ```
 
@@ -41,11 +41,11 @@ See the [google-closure-compiler](https://www.npmjs.com/package/google-closure-c
 
 ## Running the tests
 
-```
+```sh
 yarn test
 ```
 or
-```
+```sh
 npm test
 ```
 
@@ -60,13 +60,13 @@ The tests check:
 
 To format the code:
 
-```
+```sh
 yarn format
 ```
 
 To check formatting:
 
-```
+```sh
 yarn test
 ```
 
@@ -93,6 +93,12 @@ We use [SemVer](http://semver.org/) for versioning.
 - **Ben Gubler** ([nebrelbug](https://github.com/nebrelbug))
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+
+## Release History
+
+* 1.0.0
+    * Initial release
+
 
 ## License
 
