@@ -8,6 +8,7 @@ Rollup plugin that lets you compile your code with Google Closure Compiler
 - Google Closure Compiler is the best JS minifier
 - It uses the up-to-date `google-closure-compiler` package on npm, rather than the outdated `google-closure-compiler-js`
 - It doesn't require you to have Java installed
+- Simple setup and use
 
 ## Install
 
