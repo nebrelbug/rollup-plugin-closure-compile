@@ -10,6 +10,10 @@ Rollup plugin that lets you compile your code with Google Closure Compiler
 - It doesn't require you to have Java installed
 - Simple setup and use
 
+### Caveats
+
+Yes, this plugin will run slower than Uglify or Terser, but it will typically produce a smaller code size. You decide if it's worth it.
+
 ## Install
 
 With Yarn:
