@@ -31,7 +31,7 @@ npm install rollup-plugin-closure-compile
 ## Usage
 
 ```js
-import closureCompile from 'closure-compiler-rollup'
+import closureCompile from 'rollup-plugin-closure-compile'
 
 // In Rollup config:
 
